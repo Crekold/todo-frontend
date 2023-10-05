@@ -1,11 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Tasks from './components/Tasks.vue'
+import Login from './components/Login.vue'
 
 const routes = [
   {
     path: '/tasks',
     name: 'Tasks',
     component: Tasks
+  },
+  {
+    path: '/',
+    name: 'Login',
+    component: Login
   }
 ]
 
