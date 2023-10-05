@@ -8,6 +8,7 @@
             <h6 class="card-subtitle mb-2 text-muted">{{ task.dueDate }}</h6>
             <p class="card-text">Estado: {{ task.status }}</p>
             <p class="card-text">Etiqueta: {{ getEtiqueta(task.etiquetaId) }}</p>
+            <button @click="toggleStatus(task)" class="btn btn-secondary">Cambiar estado</button>
           </div>
         </div>
       </div>
@@ -40,6 +41,20 @@ export default {
     },
     createTask() {
       router.push('/create-task');
+    },
+    async toggleStatus(task) {
+      try {
+        const newStatus = task.status === 'pendiente' ? 'completada' : 'pendiente';
+        const response = await axios.put(`http://localhost:8080/api/v1/task/${task.taskId}`, { status: newStatus });
+        
+        if (response.status === 200) {
+          task.status = newStatus;
+        } else {
+          console.error('Error al cambiar el estado de la tarea');
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   },
   async created() {
