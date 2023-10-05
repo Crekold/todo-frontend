@@ -1,16 +1,18 @@
 <template>
+  <div class="background">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-6">
           <div class="card">
             <div class="card-body">
+              <h2 class="text-center text-primary mb-4">Iniciar sesión</h2>
               <form @submit.prevent="login">
                 <div class="form-group">
-                  <label for="username">Nombre de usuario</label>
+                  <label for="username"><i class="fas fa-user"></i> Nombre de usuario</label>
                   <input type="text" class="form-control" id="username" v-model="username">
                 </div>
                 <div class="form-group">
-                  <label for="password">Contraseña</label>
+                  <label for="password"><i class="fas fa-lock"></i> Contraseña</label>
                   <input type="password" class="form-control" id="password" v-model="password">
                 </div>
                 <button type="submit" class="btn btn-primary">Iniciar sesión</button>
@@ -20,8 +22,10 @@
         </div>
       </div>
     </div>
-  </template>
-  
+  </div>
+</template>
+
+
   <script>
   import axios from 'axios';
   import router from '../router';
@@ -69,8 +73,14 @@
   </script>
   
   <style scoped>
-  .container {
-    margin-top: 50px;
+  .background {
+    background-image: url('https://vtbroot.s3.amazonaws.com/ROCCAT_AIMO-3DLighting_Wallpaper_All-Resolutions/ROCCAT_AIMO-3DLighting_Wallpaper_3440x1440_UW.png');
+    background-size: cover;
+    height: 100vh;
+  }
+  
+  
+  .fas {
+    margin-right: 5px;
   }
   </style>
-  

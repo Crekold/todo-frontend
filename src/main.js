@@ -4,9 +4,13 @@ import router from './router' // Importa tu archivo de configuración de Vue Rou
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
+
 const app = createApp(App)
 
 // Configura Vue Router
-app.use(router)
+app.use(router).use(VueSweetalert2)
 
 app.mount('#app')

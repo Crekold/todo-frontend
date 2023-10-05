@@ -12,7 +12,8 @@
         </div>
       </div>
     </div>
-    <button @click="logout" class="btn btn-primary">Cerrar sesión</button>
+    <button @click="logout" class="btn btn-danger logout-btn">Cerrar sesión</button>
+    <button @click="createTask" class="btn btn-primary create-btn">Crear tarea</button>
   </div>
 </template>
 
@@ -36,6 +37,9 @@ export default {
     logout() {
       localStorage.removeItem('userId');
       router.push('/');
+    },
+    createTask() {
+      router.push('/create-task');
     }
   },
   async created() {
@@ -57,5 +61,17 @@ export default {
 <style scoped>
 .table {
   margin-top: 20px;
+}
+
+.logout-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+}
+
+.create-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 }
 </style>
