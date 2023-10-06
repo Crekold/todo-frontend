@@ -1,22 +1,33 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-4" v-for="task in tasks" :key="task.taskId">
-        <div class="card" style="width: 18rem;">
-          <div class="card-body">
-            <h5 class="card-title">{{ task.nameTask }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">{{ task.dueDate }}</h6>
-            <p class="card-text">Estado: {{ task.status }}</p>
-            <p class="card-text">Etiqueta: {{ getEtiqueta(task.etiquetaId) }}</p>
-            <button @click="toggleStatus(task)" class="btn btn-secondary">Cambiar estado</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <button @click="logout" class="btn btn-danger logout-btn">Cerrar sesión</button>
-    <button @click="createTask" class="btn btn-primary create-btn">Crear tarea</button>
-  </div>
+  <v-container>
+    <v-row>
+      <v-col cols="12" md="4" v-for="task in tasks" :key="task.taskId">
+        <v-card>
+          <v-card-title>{{ task.nameTask }}</v-card-title>
+          <v-card-subtitle>{{ task.dueDate }}</v-card-subtitle>
+          <v-card-text>
+            Estado: {{ task.status }}
+            <br>
+            Etiqueta: {{ getEtiqueta(task.etiquetaId) }}
+          </v-card-text>
+          <v-card-actions>
+            <v-btn @click="toggleStatus(task)" color="secondary">Cambiar estado</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row class="fixed-bottom pb-3 d-flex justify-space-between">
+      <v-col cols="auto">
+        <v-btn color="red" @click="logout">Cerrar sesión</v-btn>
+        
+      </v-col>
+      <v-col cols="auto">
+        <v-btn color="primary" @click="createTask">Crear tarea</v-btn>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
+
 
 <script>
 import axios from 'axios';

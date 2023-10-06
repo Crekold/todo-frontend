@@ -17,7 +17,8 @@
     "sweetalert2": "^11.7.31",
     "vue": "^3.2.26",
     "vue-router": "^4.2.5",
-    "vue-sweetalert2": "^5.0.5"
+    "vue-sweetalert2": "^5.0.5",
+    "vuetify": "^3.3.20"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
