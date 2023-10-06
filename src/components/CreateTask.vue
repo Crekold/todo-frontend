@@ -19,6 +19,7 @@
         </div>
         <div class="form-group">
           <label for="etiquetaId">Etiqueta</label>
+          <button type="button" class="btn btn-secondary mb-4 ml-2" @click="showTagModal">Gestionar Etiquetas</button>
           <select class="form-control" id="etiquetaId" v-model.number="etiquetaId">
             <option v-for="(etiqueta, index) in etiquetas" :key="index" :value="etiqueta.idEtiqueta">{{ etiqueta.etiqueta }}</option>
           </select>
@@ -26,12 +27,49 @@
         <button type="submit" class="btn btn-primary">Crear tarea</button>
       </form>
     </div>
+   
+<!-- Manage Tags Modal -->
+<div class="modal fade" id="manageTagsModal" tabindex="-1" aria-labelledby="manageTagsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="manageTagsModalLabel">Gestionar Etiquetas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Lista de etiquetas con botones de edición -->
+                <ul class="list-group mb-4">
+                  <li v-for="(etiqueta, index) in etiquetas" :key="index" class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ etiqueta.etiqueta }}
+                    <button class="btn btn-sm btn-warning" @click="startEditTag(etiqueta)">Editar</button>
+                    <button class="btn btn-sm btn-danger" @click="deleteTag(etiqueta)">Borrar</button>
+                  </li>
+                </ul>
+
+                <!-- Formulario para agregar o editar etiquetas -->
+                <form @submit.prevent="editingTag ? saveEditTag() : addTag">
+                    <div class="mb-3">
+                        <label for="tagName" class="form-label">Nombre de la Etiqueta</label>
+                        <input type="text" class="form-control" id="tagName" v-model="newTag.name" required>
+                    </div>
+                    <!-- Botones condicionales: "Guardar Cambios" para editar y "Agregar Etiqueta" para añadir -->
+                    <button v-if="editingTag" type="submit" class="btn btn-warning">Guardar Cambios</button>
+                    <button v-else type="submit" class="btn btn-primary">Agregar Etiqueta</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
   </template>
   
   <script>
   import axios from 'axios';
   import router from '../router';
   import Swal from 'sweetalert2';
+  import { Modal } from 'bootstrap';
   
   export default {
     name: 'CreateTask',
@@ -41,10 +79,73 @@
         dueDate: '',
         status: 'pendiente',
         etiquetaId: null,
-        etiquetas: []
+        etiquetas: [],
+        newTag: {
+            name: ''
+        },
+        editingTag: null,
       };
     },
     methods: {
+      showTagModal() {
+        var myModal = new Modal(document.getElementById('manageTagsModal'), {focus: true});
+        myModal.show();
+    },
+    startEditTag(tag) {
+  this.editingTag = tag;
+  this.newTag.name = tag.etiqueta;
+},
+async deleteTag(tag) {
+    try {
+        const response = await axios.delete(`http://localhost:8080/api/v1/etiqueta/${tag.idEtiqueta}`);
+        if (response.status === 200) {
+            const index = this.etiquetas.findIndex(etiqueta => etiqueta.idEtiqueta === tag.idEtiqueta);
+            this.etiquetas.splice(index, 1);
+            Swal.fire('¡Eliminado!', 'La etiqueta ha sido eliminada con éxito.', 'success');
+        } else {
+            Swal.fire('Error', 'No se pudo eliminar la etiqueta.', 'error');
+        }
+    } catch (error) {
+        Swal.fire('Error', 'No se pudo eliminar la etiqueta.', 'error');
+        console.error(error);
+    }
+},
+
+async saveEditTag() {
+  try {
+    const response = await axios.put(`http://localhost:8080/api/v1/etiqueta/${this.editingTag.idEtiqueta}`, {
+      etiqueta: this.newTag.name
+    });
+    if (response.status === 200) {
+      const index = this.etiquetas.findIndex(etiqueta => etiqueta.idEtiqueta === this.editingTag.idEtiqueta);
+      this.etiquetas[index].etiqueta = this.newTag.name;
+      this.editingTag = null;
+      Swal.fire('¡Actualizado!', 'La etiqueta ha sido actualizada con éxito.', 'success');
+    } else {
+      Swal.fire('Error', 'No se pudo actualizar la etiqueta.', 'error');
+    }
+  } catch (error) {
+    Swal.fire('Error', 'No se pudo actualizar la etiqueta.', 'error');
+    console.error(error);
+  }
+},
+    async addTag() {
+    try {
+        const response = await axios.post('http://localhost:8080/api/v1/etiqueta', {etiqueta: this.newTag.name, idUsuario: localStorage.getItem('userId')});
+        if (response.status === 201) {
+            this.etiquetas.push(response.data);
+            Swal.fire('¡Agregado!', 'La etiqueta ha sido agregada con éxito.', 'success');
+            // Opcional: Cierra el modal después de agregar la etiqueta
+            const modalInstance = Modal.getInstance(document.getElementById('manageTagsModal'));
+            if (modalInstance) modalInstance.hide();
+        } else {
+            Swal.fire('Error', 'No se pudo agregar la etiqueta.', 'error');
+        }
+    } catch (error) {
+        Swal.fire('Error', 'No se pudo agregar la etiqueta.', 'error');
+        console.error(error);
+    }
+},
       async createTask() {
         try {
           const userId = localStorage.getItem('userId');

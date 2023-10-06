@@ -77,7 +77,13 @@
     background-image: url('https://vtbroot.s3.amazonaws.com/ROCCAT_AIMO-3DLighting_Wallpaper_All-Resolutions/ROCCAT_AIMO-3DLighting_Wallpaper_3440x1440_UW.png');
     background-size: cover;
     height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
+
+
   
   
   .fas {
