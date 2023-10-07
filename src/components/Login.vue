@@ -26,29 +26,31 @@
 </template>
 
 
-  <script>
-  import axios from 'axios';
-  import router from '../router';
-  import Swal from 'sweetalert2';
-  
-  export default {
-    name:'LoginPage',
-    data() {
-      return {
-        username: '',
-        password: ''
-      }
-    },
-    methods: {
-      async login() {
-        try {
-          const response = await axios.post('http://localhost:8080/api/v1/login', {
-            username: this.username,
-            password: this.password
-          });
-  
+<script>
+import axios from 'axios';
+import router from '../router';
+import Swal from 'sweetalert2';
+
+export default {
+  name:'LoginPage',
+  data() {
+    return {
+      username: '',
+      password: ''
+    }
+  },
+  methods: {
+    async login() {
+      try {
+        const response = await axios.post('http://localhost:8080/api/v1/login', {
+          username: this.username,
+          password: this.password
+        });
+
+        // If the status code is in the 200 range, it was successful
+        if (response.status >= 200 && response.status < 300) {
           const [status, userId] = response.data.split(', ');
-  
+
           if (status === '1') {
             localStorage.setItem('userId', userId);
             router.push('/tasks');
@@ -57,20 +59,24 @@
               'Has iniciado sesión correctamente.',
               'success'
             );
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: '¡Inicio de sesión fallido!'
-            });
           }
-        } catch (error) {
-          console.error(error);
         }
+      } catch (error) {
+        const errorMessage = error.response && error.response.data && error.response.data.message 
+          ? error.response.data.message 
+          : '¡Inicio de sesión fallido!';
+          
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: errorMessage
+        });
+        console.error(error);
       }
     }
   }
-  </script>
+}
+</script>
   
   <style scoped>
   .background {
