@@ -50,5 +50,3 @@ Las contribuciones son bienvenidas. Por favor, abre un 'pull request' con tus ca
 
 
 ---
-
-Espero que este README te sirva como punto de partida para tu aplicación de tareas en Vue. ¡Buena suerte con tu proyecto!
