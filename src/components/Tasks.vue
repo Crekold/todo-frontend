@@ -15,15 +15,46 @@
           </v-card-actions>
         </v-card>
       </v-col>
-    </v-row>
-    <v-row class="fixed-bottom pb-3 d-flex justify-space-between">
-      <v-col cols="auto">
-        <v-btn color="red" @click="logout">Cerrar sesión</v-btn>
-        
-      </v-col>
-      <v-col cols="auto">
-        <v-btn color="primary" @click="createTask">Crear tarea</v-btn>
-      </v-col>
+      <v-speed-dial
+      v-model="fab"
+      absolute
+      bottom
+      right
+      direction="top"
+    >
+      <template v-slot:activator>
+        <v-btn
+          v-model="fab"
+          color="primary"
+          dark
+          fab
+        >
+          <v-icon>mdi-dots-vertical</v-icon>
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+    
+      </template>
+
+      <v-btn 
+        fab 
+        dark 
+        small 
+        color="red" 
+        @click="logout"
+      >
+        <v-icon>mdi-logout</v-icon>
+      </v-btn>
+
+      <v-btn 
+        fab 
+        dark 
+        small 
+        color="blue" 
+        @click="createTask"
+      >
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+    </v-speed-dial>
     </v-row>
   </v-container>
 </template>
@@ -38,7 +69,8 @@ export default {
   data() {
     return {
       tasks: [],
-      etiquetas: []
+      etiquetas: [],
+      fab: false
     };
   },
   methods: {
